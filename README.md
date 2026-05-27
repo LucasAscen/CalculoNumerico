@@ -4,7 +4,8 @@
 
 ## Integrantes :
 
-_* Lucas *_
+**_ Lucas _**
 
-_* Wendson *_
+**_ Wendson _**
+
 # CalculoNumerico
