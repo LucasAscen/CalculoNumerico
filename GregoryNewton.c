@@ -1,88 +1,66 @@
 #include <stdio.h>
-#include <stdlib.h>
 
-// Função para calcular a tabela de diferenças divididas
-void calcular_diferencas(double *x, double **diff_tab, int n) {
-    for (int j = 1; j < n; j++) {
-        for (int i = 0; i < n - j; i++) {
-            diff_tab[i][j] = (diff_tab[i + 1][j - 1] - diff_tab[i][j - 1]) / (x[i + j] - x[i]);
-        }
+// Função para calcular o termo u * (u - 1) * (u - 2) ...
+float calcularU(float u, int n) {
+    float termo = u;
+    for (int i = 1; i < n; i++) {
+        termo = termo * (u - i);
     }
+    return termo;
 }
 
-// Função para interpolar o valor no instante estipulado
-double interpolar_trajetoria(double *x, double **diff_tab, int n, double t_alvo) {
-    double resultado = diff_tab[0][0];
-    double termo_produtorio = 1.0;
-
-    for (int i = 1; i < n; i++) {
-        termo_produtorio *= (t_alvo - x[i - 1]);
-        resultado += diff_tab[0][i] * termo_produtorio;
+// Função para calcular o fatorial de um número
+int fatorial(int n) {
+    int f = 1;
+    for (int i = 2; i <= n; i++) {
+        f *= i;
     }
-    return resultado;
+    return f;
 }
 
 int main() {
-    int n;
-
-    printf("==================================================\n");
-    printf("   SISTEMA DE TELEMETRIA E INTERPOLACAO DE DRONES \n");
-    printf("==================================================\n\n");
+    // Dados do problema
+    int n = 4; // Número de pontos
+    float x[] = {10, 20, 30, 40};
+    float y[4][4]; // Matriz para armazenar a tabela de diferenças
     
-    printf("Quantos registros de sensores (pontos) deseja inserir? ");
-    if (scanf("%d", &n) != 1 || n <= 0) {
-        printf("Quantidade invalida.\n");
-        return 1;
+    // Inicializando a primeira coluna com os valores de y (temperaturas)
+    y[0][0] = 45.0;
+    y[1][0] = 52.0;
+    y[2][0] = 60.0;
+    y[3][0] = 71.0;
+
+    float valor_alvo = 25.0;
+
+    // 1. Construção da Tabela de Diferenças Avançadas
+    for (int j = 1; j < n; j++) {
+        for (int i = 0; i < n - j; i++) {
+            y[i][j] = y[i + 1][j - 1] - y[i][j - 1];
+        }
     }
 
-    // Alocação dinâmica dos vetores e da matriz de diferenças divididas
-    double *tempo = (double *)malloc(n * sizeof(double));
-    double **diff_tab = (double **)malloc(n * sizeof(double *));
+    // (Opcional) Imprimir a tabela de diferenças para verificação
+    printf("--- Tabela de Diferencas ---\n");
     for (int i = 0; i < n; i++) {
-        diff_tab[i] = (double *)malloc(n * sizeof(double));
+        printf("%6.1f", x[i]);
+        for (int j = 0; j < n - i; j++) {
+            printf("%10.2f", y[i][j]);
+        }
+        printf("\n");
+    }
+    printf("----------------------------\n\n");
+
+    // 2. Aplicação da Fórmula de Interpolação de Gregory-Newton
+    float resultado = y[0][0]; // Começa com y0
+    float h = x[1] - x[0];     // Passo constante (10)
+    float u = (valor_alvo - x[0]) / h;
+
+    for (int i = 1; i < n; i++) {
+        resultado += (calcularU(u, i) * y[0][i]) / fatorial(i);
     }
 
-    printf("\nDigite os dados capturados pelos sensores:\n");
-    for (int i = 0; i < n; i++) {
-        printf(" Registro [%d] - Instante (segundos) e Altitude (metros): ", i + 1);
-        scanf("%lf %lf", &tempo[i], &diff_tab[i][0]);
-    }
+    // Exibe o resultado final
+    printf("A temperatura estimada no minuto %.1f eh: %.2f C\n", valor_alvo, resultado);
 
-    // Processamento matemático
-    calcular_diferencas(tempo, diff_tab, n);
-
-    // Apresentação dos coeficientes calculados
-    printf("\n>>> Calculando Polinomio de Gregory-Newton...\n");
-    printf("Coeficientes logicos (d0 a d%d) obtidos com sucesso!\n", n - 1);
-    for (int i = 0; i < n; i++) {
-        printf("  d%d = %+10.4f\n", i, diff_tab[0][i]);
-    }
-
-    // Loop de simulação interativa para teste
-    char continuar;
-    do {
-        double t_alvo;
-        printf("\n--------------------------------------------------\n");
-        printf("Digite um instante de tempo (s) para rastrear a altitude: ");
-        scanf("%lf", &t_alvo);
-
-        double altitude_estimada = interpolar_trajetoria(tempo, diff_tab, n, t_alvo);
-
-        printf("\n[Resultado da Interpolacao]:\n");
-        printf("No instante t = %.2fs, a altitude estimada do drone e de %.2fm.\n", t_alvo, altitude_estimada);
-        printf("--------------------------------------------------\n");
-
-        printf("Deseja testar outro instante de tempo? (s/n): ");
-        scanf(" %c", &continuar);
-    } while (continuar == 's' || continuar == 'S');
-
-    
-    for (int i = 0; i < n; i++) {
-        free(diff_tab[i]);
-    }
-    free(diff_tab);
-    free(tempo);
-
-    printf("\nSistema encerrado. Simulacao concluida com sucesso!\n");
     return 0;
 }
