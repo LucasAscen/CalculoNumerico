@@ -1,6 +1,6 @@
 #include <stdio.h>
 
-// Função para calcular o termo u * (u - 1) * (u - 2) ...
+// Função para calcular o termo u 
 float calcularU(float u, int n) {
     float termo = u;
     for (int i = 1; i < n; i++) {
@@ -39,7 +39,7 @@ int main() {
         }
     }
 
-    // (Opcional) Imprimir a tabela de diferenças para verificação
+    //tabela de diferenças para verificação
     printf("--- Tabela de Diferencas ---\n");
     for (int i = 0; i < n; i++) {
         printf("%6.1f", x[i]);
@@ -50,7 +50,7 @@ int main() {
     }
     printf("----------------------------\n\n");
 
-    // 2. Aplicação da Fórmula de Interpolação de Gregory-Newton
+    //Aplicação da Fórmula de Interpolação de Gregory-Newton
     float resultado = y[0][0]; // Começa com y0
     float h = x[1] - x[0];     // Passo constante (10)
     float u = (valor_alvo - x[0]) / h;
@@ -59,7 +59,6 @@ int main() {
         resultado += (calcularU(u, i) * y[0][i]) / fatorial(i);
     }
 
-    // Exibe o resultado final
     printf("A temperatura estimada no minuto %.1f eh: %.2f C\n", valor_alvo, resultado);
 
     return 0;
