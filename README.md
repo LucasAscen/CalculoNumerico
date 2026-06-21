@@ -109,4 +109,5 @@ Total = (3 × 2 / 8) · [10 + 3(15) + 3(12) + 8]
 
 - **Resultado (Newton-Cotes 3/8):** Total ≈ **74.25 MB** transferidos no intervalo de 0 a 6 segundos.
 
+## Sexta Implementação -  Trapézios e Simpson
 
