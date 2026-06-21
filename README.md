@@ -82,11 +82,11 @@ Nesta etapa, implementamos a **Fórmula de Quadratura de Newton-Cotes**, especif
 
 - **Newton-Cotes 3/8:** Aproxima a integral definida no intervalo formado pelos 4 pontos, aplicando a fórmula:
 
-- ∫ f(x) dx ≈ (3h/8) · [y0 + 3y1 + 3y2 + y3]
+                       ∫ f(x) dx ≈ (3h/8) · [y0 + 3y1 + 3y2 + y3]
   
   onde **h** é o espaçamento constante entre os pontos no eixo x, e **y0, y1, y2, y3** são os valores da função (ou os dados amostrados) em cada ponto. Os coeficientes 1, 3, 3, 1 vêm da derivação do polinômio interpolador de grau 3 usado como base da fórmula.
 
-- A regra exige que os pontos estejam **igualmente espaçados** (espaçamento **h** constante) e que existam **exatamente 4 pontos** (3 intervalos) — por isso ela é aplicada de forma pontual a um pequeno trecho dos dados, e não de forma repetida ao longo de um intervalo maior.
+- A regra exige que os pontos estejam **igualmente espaçados** (espaçamento **h** constante) e que existam **exatamente 4 pontos** (3 intervalos), por isso ela é aplicada de forma pontual a um pequeno trecho dos dados, e não de forma repetida ao longo de um intervalo maior.
 
 ## Exemplos de aplicação
 
@@ -109,5 +109,4 @@ Total = (3 × 2 / 8) · [10 + 3(15) + 3(12) + 8]
 
 - **Resultado (Newton-Cotes 3/8):** Total ≈ **74.25 MB** transferidos no intervalo de 0 a 6 segundos.
 
-Esse resultado mostra como a integração numérica permite reconstruir uma grandeza acumulada (volume de dados) a partir de medições instantâneas de taxa, sem a necessidade de conhecer a função contínua que descreve o tráfego real do servidor.
-```
+
