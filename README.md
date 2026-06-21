@@ -82,7 +82,7 @@ Nesta etapa, implementamos a **Fórmula de Quadratura de Newton-Cotes**, especif
 
 - **Newton-Cotes 3/8:** Aproxima a integral definida no intervalo formado pelos 4 pontos, aplicando a fórmula:
 
-                       ∫ f(x) dx ≈ (3h/8) · [y0 + 3y1 + 3y2 + y3]
+                                ∫ f(x) dx ≈ (3h/8) · [y0 + 3y1 + 3y2 + y3]
   
   onde **h** é o espaçamento constante entre os pontos no eixo x, e **y0, y1, y2, y3** são os valores da função (ou os dados amostrados) em cada ponto. Os coeficientes 1, 3, 3, 1 vêm da derivação do polinômio interpolador de grau 3 usado como base da fórmula.
 
@@ -111,3 +111,69 @@ Total = (3 × 2 / 8) · [10 + 3(15) + 3(12) + 8]
 
 ## Sexta Implementação -  Trapézios e Simpson
 
+Dando sequência à Integração Numérica, agora trabalho com dois métodos que, ao contrário da Regra 3/8 (que exige exatamente 4 pontos), podem ser aplicados a qualquer quantidade de pontos igualmente espaçados: a **Regra dos Trapézios (Repetida)** e a **Regra de 1/3 de Simpson**. Os dois aproximam a área sob a curva, mas de formas diferentes — o que permite comparar a precisão de cada abordagem sobre o mesmo conjunto de dados.
+
+## **Funcionalidades:**
+
+- **Trapézios (Repetida):** Aproxima cada intervalo entre dois pontos consecutivos por um trapézio (uma reta ligando os pontos), somando a área de todos os trapézios formados ao longo do intervalo total:
+
+ 
+                                     ∫ f(x) dx ≈ (h/2) · [y0 + 2(y1 + y2 + ... + yn-2) + yn-1]
+ 
+
+- **Simpson 1/3:** Em vez de retas, ajusta parábolas a cada par de intervalos, capturando melhor a curvatura dos dados. Exige um número par de intervalos:
+
+  
+                                    ∫ f(x) dx ≈ (h/3) · [y0 + 4(y1 + y3 + ...) + 2(y2 + y4 + ...) + yn-1]
+  
+
+## Exemplos de aplicação
+
+### Contexto: distância percorrida por um carro elétrico
+
+Recebi os dados de velocidade de um carro elétrico registrados ao longo do tempo, já que o odômetro do veículo quebrou e não é mais possível ler a distância total percorrida diretamente. Como a distância é a integral da velocidade em relação ao tempo, apliquei os dois métodos de integração numérica sobre os mesmos pontos para estimar a distância total e comparar os resultados.
+
+### Dados utilizados:
+
+- Tempo (h): [0.0, 0.5, 1.0, 1.5, 2.0], com espaçamento constante h = 0.5
+- Velocidade (km/h): [0, 40, 65, 80, 90]
+
+## Calculando a distância total percorrida:
+
+- **Trapézios (Repetida):** ≈ **115.0 km**
+- **Simpson 1/3:** ≈ **116.667 km**
+
+## Sétima Implementação - Quadratura de Gauss
+
+Para concluir a etapa de Integração Numérica, implementei a **Fórmula de Quadratura de Gauss**, um método diferente dos anteriores: em vez de usar pontos igualmente espaçados ao longo do intervalo, ela escolhe pontos específicos (raízes de polinômios de Legendre) e pesos associados, que juntos minimizam o erro da aproximação. Com poucos pontos, a Quadratura de Gauss consegue integrar com exatidão polinômios de grau relativamente alto — algo que os métodos anteriores só alcançariam usando muito mais pontos.
+
+## **Funcionalidades:**
+
+- **`quadratura_gauss(funcao, a, b, n_pontos)`:** Função que recebe a função a ser integrada, os limites de integração `[a, b]` e a quantidade de pontos (`n_pontos = 2` ou `n_pontos = 3`), com as raízes e os pesos já fixados para o intervalo padrão `[-1, 1]`:
+
+
+  ∫ f(x) dx ≈ Σ wi · f(xi)
+  
+
+  - **n = 2:** raízes = ±1/√3, pesos = 1, 1
+  - **n = 3:** raízes = −√(3/5), 0, +√(3/5), pesos = 5/9, 8/9, 5/9
+
+  Quando o intervalo de integração não é `[-1, 1]`, a função faz a mudança de variável necessária para reaproveitar essas mesmas raízes e pesos tabelados.
+
+## Exemplos de aplicação
+
+### Contexto: torque de um motor
+
+Recebi a função que descreve o torque de um motor ao longo de um intervalo de operação e precisei calcular o trabalho total realizado, que corresponde à integral dessa função no intervalo dado. Usei a Quadratura de Gauss com apenas 2 pontos para obter o resultado.
+
+### Dados utilizados:
+
+- Função: f(x) = 5x³ + x² − 12x + 4
+- Limites de integração: a = −1, b = 1
+
+## Calculando o trabalho total:
+
+- **Gauss (n = 2):** ≈ **8.667**
+- **Gauss (n = 3):** ≈ **8.667**
+
+Os dois resultados são idênticos porque a Quadratura de Gauss com apenas 2 pontos já integra com exatidão qualquer polinômio até grau 3 — e como os termos ímpares da função (5x³ e −12x) se anulam no intervalo simétrico [-1, 1], o valor exato da integral é 26/3 ≈ 8.667, confirmando, assim, a precisão do método mesmo com poucos pontos.
