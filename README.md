@@ -3,13 +3,48 @@
 # CCET - UFMA
 
 ## Integrantes :
+
 **_Ana Caroline Santos Almeida_**
 
-**_ Lucas _**
+**_Lucas Seleiro Ascenção_**
 
-**_ Wendson _**
+**_Wendson Menezes Dias_**
 
 # CalculoNumerico
+
+## Primeira Implementação - **Lagrange e Newton**
+
+## Explicação do Código
+
+O programa simula um sistema de telemetria de um drone autônomo. Durante o voo, ocorreu uma falha no sensor de altitude e o valor correspondente ao instante **t = 3,5 s** foi perdido. Para recuperar essa informação, utilizamos os dados registrados antes e depois da falha e aplicamos métodos de interpolação polinomial.
+
+### Dados Coletados
+
+| Tempo (s) | Altitude (m) |
+| --------- | ------------ |
+| 1,0       | 1,2          |
+| 2,0       | 1,9          |
+| 3,0       | 3,2          |
+| 4,0       | 5,5          |
+| 5,0       | 8,2          |
+
+### Método de Lagrange
+
+A função `lagrange()` implementa a interpolação de Lagrange, construindo um polinômio que passa exatamente por todos os pontos conhecidos. Em seguida, o polinômio é utilizado para estimar a altitude no instante desejado (`x = 3,5 s`).
+
+### Método de Newton
+
+A função `newton()` implementa a interpolação de Newton por Diferenças Divididas. Primeiramente, é criada uma tabela de diferenças divididas e, a partir dela, é montado o polinômio interpolador utilizado para calcular a altitude no instante da falha.
+
+### Programa Principal
+
+Na função `main()`, os tempos e altitudes são armazenados em vetores. Em seguida, os métodos de Lagrange e Newton são executados para estimar a altitude do drone em **t = 3,5 s**.
+
+### Resultado
+
+Os dois métodos produzem praticamente o mesmo resultado, pois geram o mesmo polinômio interpolador.
+
+**Altitude estimada em t = 3,5 s:4,175 metros**
 
 ## Segunda Implementação - **Interpolação Gregory-Newton**
 
@@ -49,8 +84,8 @@ Além da abordagem polinomial, o projeto também contempla a técnica de **Inter
 
 ## Interpolando para 𝑡 = 1.5:
 
-- **Linear:**𝑦(1.5) = 3.75 cm
-- **Linear:**𝑦(1.5) ≈ 3.63 cm
+- **Linear:** 𝑦(1.5) = 3.75 cm
+- **Linear:** 𝑦(1.5) ≈ 3.63 cm
 
 ## Quarta Implementação - Ajuste de Curvas – Método dos Mínimos Quadrados (MMQ)
 
@@ -58,7 +93,7 @@ Diferente da interpolação, que força a curva a passar exatamente por todos os
 
 ## **Funcionalidades:**
 
-- **Ajuste Linear (MMQ):** Calcula os coeficientes *a* e *b* da reta P1(x) = ax + b que minimizam a soma dos quadrados dos erros entre a reta e os pontos medidos, encontrando assim a melhor reta de tendência.
+- **Ajuste Linear (MMQ):** Calcula os coeficientes _a_ e _b_ da reta P1(x) = ax + b que minimizam a soma dos quadrados dos erros entre a reta e os pontos medidos, encontrando assim a melhor reta de tendência.
 
 ## Exemplos de aplicação
 
@@ -72,7 +107,7 @@ Diferente da interpolação, que força a curva a passar exatamente por todos os
 - **Equação da reta:** P1(x) = 0.66x − 3.24
 - **Previsão para x = 13:** y(13) ≈ 5.34 mil acessos
 
-## Quinta Implementação -  Integração Numérica (Newton-Cotes 3/8)
+## Quinta Implementação - Integração Numérica (Newton-Cotes 3/8)
 
 Após explorar interpolação e ajuste de curvas nas etapas anteriores, o projeto passa agora para a **Integração Numérica**, uma técnica essencial quando precisamos calcular a área sob uma curva (ou seja, resolver uma integral definida) sem conhecer a expressão analítica exata da função — apenas um conjunto de pontos amostrados, como leituras periódicas de um sensor.
 
@@ -83,7 +118,7 @@ Nesta etapa, implementamos a **Fórmula de Quadratura de Newton-Cotes**, especif
 - **Newton-Cotes 3/8:** Aproxima a integral definida no intervalo formado pelos 4 pontos, aplicando a fórmula:
 
                                 ∫ f(x) dx ≈ (3h/8) · [y0 + 3y1 + 3y2 + y3]
-  
+
   onde **h** é o espaçamento constante entre os pontos no eixo x, e **y0, y1, y2, y3** são os valores da função (ou os dados amostrados) em cada ponto. Os coeficientes 1, 3, 3, 1 vêm da derivação do polinômio interpolador de grau 3 usado como base da fórmula.
 
 - A regra exige que os pontos estejam **igualmente espaçados** (espaçamento **h** constante) e que existam **exatamente 4 pontos** (3 intervalos), por isso ela é aplicada de forma pontual a um pequeno trecho dos dados, e não de forma repetida ao longo de um intervalo maior.
@@ -104,12 +139,12 @@ Um monitor de rede capturou a taxa de transferência (banda) de um servidor a ca
 Aplicando a fórmula da Regra 3/8:
 
 Total = (3 × 2 / 8) · [10 + 3(15) + 3(12) + 8]
-      = 0.75 · [10 + 45 + 36 + 8]
-      = 0.75 · 99
+= 0.75 · [10 + 45 + 36 + 8]
+= 0.75 · 99
 
 - **Resultado (Newton-Cotes 3/8):** Total ≈ **74.25 MB** transferidos no intervalo de 0 a 6 segundos.
 
-## Sexta Implementação -  Trapézios e Simpson
+## Sexta Implementação - Trapézios e Simpson
 
 Dando sequência à Integração Numérica, agora trabalho com dois métodos que, ao contrário da Regra 3/8 (que exige exatamente 4 pontos), podem ser aplicados a qualquer quantidade de pontos igualmente espaçados: a **Regra dos Trapézios (Repetida)** e a **Regra de 1/3 de Simpson**. Os dois aproximam a área sob a curva, mas de formas diferentes — o que permite comparar a precisão de cada abordagem sobre o mesmo conjunto de dados.
 
@@ -117,15 +152,11 @@ Dando sequência à Integração Numérica, agora trabalho com dois métodos que
 
 - **Trapézios (Repetida):** Aproxima cada intervalo entre dois pontos consecutivos por um trapézio (uma reta ligando os pontos), somando a área de todos os trapézios formados ao longo do intervalo total:
 
- 
                                      ∫ f(x) dx ≈ (h/2) · [y0 + 2(y1 + y2 + ... + yn-2) + yn-1]
- 
 
 - **Simpson 1/3:** Em vez de retas, ajusta parábolas a cada par de intervalos, capturando melhor a curvatura dos dados. Exige um número par de intervalos:
 
-  
                                     ∫ f(x) dx ≈ (h/3) · [y0 + 4(y1 + y3 + ...) + 2(y2 + y4 + ...) + yn-1]
-  
 
 ## Exemplos de aplicação
 
@@ -151,8 +182,8 @@ Para concluir a etapa de Integração Numérica, implementei a **Fórmula de Qua
 
 - **`quadratura_gauss(funcao, a, b, n_pontos)`:** Função que recebe a função a ser integrada, os limites de integração `[a, b]` e a quantidade de pontos (`n_pontos = 2` ou `n_pontos = 3`), com as raízes e os pesos já fixados para o intervalo padrão `[-1, 1]`:
 
-                                                                ∫ f(x) dx ≈ Σ wi · f(xi)
-  
+                                                 ∫ f(x) dx ≈ Σ wi · f(xi)
+
   - **n = 2:** raízes = ±1/√3, pesos = 1, 1
   - **n = 3:** raízes = −√(3/5), 0, +√(3/5), pesos = 5/9, 8/9, 5/9
 
