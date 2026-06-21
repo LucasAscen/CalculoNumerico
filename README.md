@@ -151,10 +151,8 @@ Para concluir a etapa de Integração Numérica, implementei a **Fórmula de Qua
 
 - **`quadratura_gauss(funcao, a, b, n_pontos)`:** Função que recebe a função a ser integrada, os limites de integração `[a, b]` e a quantidade de pontos (`n_pontos = 2` ou `n_pontos = 3`), com as raízes e os pesos já fixados para o intervalo padrão `[-1, 1]`:
 
-
-  ∫ f(x) dx ≈ Σ wi · f(xi)
+                                                                ∫ f(x) dx ≈ Σ wi · f(xi)
   
-
   - **n = 2:** raízes = ±1/√3, pesos = 1, 1
   - **n = 3:** raízes = −√(3/5), 0, +√(3/5), pesos = 5/9, 8/9, 5/9
 
@@ -176,4 +174,4 @@ Recebi a função que descreve o torque de um motor ao longo de um intervalo de 
 - **Gauss (n = 2):** ≈ **8.667**
 - **Gauss (n = 3):** ≈ **8.667**
 
-Os dois resultados são idênticos porque a Quadratura de Gauss com apenas 2 pontos já integra com exatidão qualquer polinômio até grau 3 — e como os termos ímpares da função (5x³ e −12x) se anulam no intervalo simétrico [-1, 1], o valor exato da integral é 26/3 ≈ 8.667, confirmando, assim, a precisão do método mesmo com poucos pontos.
+Os dois resultados são idênticos porque a Quadratura de Gauss com apenas 2 pontos já integra com exatidão qualquer polinômio até grau 3 e como os termos ímpares da função (5x³ e −12x) se anulam no intervalo simétrico [-1, 1], o valor exato da integral é 26/3 ≈ 8.667, confirmando, assim, a precisão do método mesmo com poucos pontos.
